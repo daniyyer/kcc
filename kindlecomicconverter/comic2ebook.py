@@ -912,6 +912,14 @@ def detectSuboptimalProcessing(tmppath, orgpath):
     imageNumber = 0
     imageSmaller = 0
     alreadyProcessed = False
+
+    for root, _, files in os.walk(tmppath, False):
+        for name in files:
+            # 检查是否为 NCX 文件
+            if name.lower().endswith('.ncx'):
+                # 处理 NCX 文件，重命名图像
+                processNCXFile(os.path.join(root, name), tmppath)
+
     for root, _, files in os.walk(tmppath, False):
         for name in files:
             if getImageFileName(name) is not None:
@@ -933,6 +941,7 @@ def detectSuboptimalProcessing(tmppath, orgpath):
                         raise RuntimeError('Pillow was compiled without JPG and/or PNG decoder.')
                     else:
                         raise RuntimeError('Image file %s is corrupted. Error: %s' % (pathOrg, str(err)))
+
             else:
                 try:
                     os.remove(os.path.join(root, name))
@@ -1389,3 +1398,73 @@ def makeMOBI(work, qtgui=None):
     makeMOBIWorkerPool.close()
     makeMOBIWorkerPool.join()
     return makeMOBIWorkerOutput
+
+
+def processNCXFile(ncx_file_path, base_path):
+    """处理NCX文件，根据playOrder重命名HTML中的图像文件"""
+    import xml.etree.ElementTree as ET
+    import re
+
+    try:
+        tree = ET.parse(ncx_file_path)
+        root = tree.getroot()
+
+        # 查找所有navPoint节点
+        for navpoint in root.findall('.//{http://www.daisy.org/z3986/2005/ncx/}navPoint'):
+            play_order = navpoint.get('playOrder')
+            content_elem = navpoint.find('.//{http://www.daisy.org/z3986/2005/ncx/}content')
+
+            if play_order and content_elem is not None:
+                html_src = content_elem.get('src')
+                if html_src:
+                    # 处理相对路径，找到实际的HTML文件
+                    html_path = os.path.join(os.path.dirname(ncx_file_path), html_src)
+                    if os.path.exists(html_path):
+                        updateImageInHTML(html_path, play_order)
+
+    except Exception as e:
+        print(f"Error processing NCX file {ncx_file_path}: {e}")
+
+
+def updateImageInHTML(html_file_path, play_order):
+    """更新HTML文件中的图像文件名并重命名实际的图像文件"""
+    try:
+        with open(html_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+            # 使用正则表达式查找并替换图像文件名
+        pattern = r'(<img[^>]+src="[^"]*/)([^/]+?)(-\d+)(\.png|\.jpg|\.jpeg|\.gif)("[^>]*>)'
+
+        def replace_func(match):
+            prefix = match.group(1)
+            base_name = match.group(2)
+            old_extension = match.group(4)
+            suffix = match.group(5)
+
+            # 构建原始文件路径
+            old_filename = f"{base_name}{match.group(3)}{old_extension}"
+            old_file_path = os.path.join(os.path.dirname(html_file_path), "../image", old_filename)
+
+            # 使用playOrder作为新的数字部分，格式化为6位数字
+            new_number = f"-{int(play_order):06d}"
+            new_filename = f"{base_name}{new_number}{old_extension}"
+            new_file_path = os.path.join(os.path.dirname(html_file_path), "../image", new_filename)
+
+            # 重命名实际的图像文件
+            if os.path.exists(old_file_path) and old_file_path != new_file_path:
+                try:
+                    os.rename(old_file_path, new_file_path)
+                    print(f"Renamed image file: {old_filename} -> {new_filename}")
+                except OSError as e:
+                    print(f"Error renaming image file {old_filename}: {e}")
+
+            return f"{prefix}{new_filename}{suffix}"
+
+        updated_content = re.sub(pattern, replace_func, content)
+
+        # 写回HTML文件
+        with open(html_file_path, 'w', encoding='utf-8') as f:
+            f.write(updated_content)
+
+    except Exception as e:
+        print(f"Error updating HTML file {html_file_path}: {e}")

@@ -74,6 +74,7 @@ def modify_path():
             'C:\\Program Files\\7-Zip',
             'D:\\Program Files\\7-Zip',
             'E:\\Program Files\\7-Zip',
+            'D:\\Program Files (x86)\\Kindle Previewer 3\\lib\\fc\\bin\\'
         ]
         if getattr(sys, 'frozen', False):
             os.environ['PATH'] += os.pathsep + os.pathsep.join(win_paths)
