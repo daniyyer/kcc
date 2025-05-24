@@ -913,12 +913,13 @@ def detectSuboptimalProcessing(tmppath, orgpath):
     imageSmaller = 0
     alreadyProcessed = False
 
-    for root, _, files in os.walk(tmppath, False):
-        for name in files:
-            # 检查是否为 NCX 文件
-            if name.lower().endswith('.ncx'):
-                # 处理 NCX 文件，重命名图像
-                processNCXFile(os.path.join(root, name), tmppath)
+    if options.ncxprocessing:
+        for root, _, files in os.walk(tmppath, False):
+            for name in files:
+                # 检查是否为 NCX 文件
+                if name.lower().endswith('.ncx'):
+                    # 处理 NCX 文件，重命名图像
+                    processNCXFile(os.path.join(root, name), tmppath)
 
     for root, _, files in os.walk(tmppath, False):
         for name in files:
@@ -1048,6 +1049,8 @@ def makeParser():
                                      "2: Consider every subdirectory as separate volume [Default=0]")
     output_options.add_argument("--spreadshift", action="store_true", dest="spreadshift", default=False,
                                 help="Shift first page to opposite side in landscape for spread alignment")
+    output_options.add_argument("--ncxprocessing", action="store_true", dest="ncxprocessing", default=False,
+                                    help="Process NCX files to reorder images based on playOrder")
     output_options.add_argument("--norotate", action="store_true", dest="norotate", default=False,
                                 help="Do not rotate double page spreads in spread splitter option.")
 

@@ -643,6 +643,16 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="ncxProcessingBox">
+         <property name="toolTip">
+          <string>Process NCX files to reorder images based on playOrder</string>
+         </property>
+         <property name="text">
+          <string>NCX Process</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -768,7 +778,6 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>convertButton</tabstop>
   <tabstop>clearButton</tabstop>
   <tabstop>directoryButton</tabstop>
   <tabstop>fileButton</tabstop>
@@ -790,6 +799,7 @@
   <tabstop>deleteBox</tabstop>
   <tabstop>disableProcessingBox</tabstop>
   <tabstop>chunkSizeBox</tabstop>
+  <tabstop>ncxProcessingBox</tabstop>
   <tabstop>noRotateBox</tabstop>
   <tabstop>interPanelCropBox</tabstop>
   <tabstop>reduceRainbowBox</tabstop>
@@ -800,6 +810,9 @@
   <tabstop>jobList</tabstop>
   <tabstop>gammaSlider</tabstop>
   <tabstop>widthBox</tabstop>
+  <tabstop>preserveMarginBox</tabstop>
+  <tabstop>chunkSizeCheckBox</tabstop>
+  <tabstop>convertButton</tabstop>
  </tabstops>
  <resources>
   <include location="KCC.qrc"/>

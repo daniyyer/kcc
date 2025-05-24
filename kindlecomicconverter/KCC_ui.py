@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'KCC.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -346,6 +346,11 @@ class Ui_mainWindow(object):
 
         self.gridLayout_2.addWidget(self.chunkSizeCheckBox, 7, 1, 1, 1)
 
+        self.ncxProcessingBox = QCheckBox(self.optionWidget)
+        self.ncxProcessingBox.setObjectName(u"ncxProcessingBox")
+
+        self.gridLayout_2.addWidget(self.ncxProcessingBox, 6, 0, 1, 1)
+
 
         self.gridLayout.addWidget(self.optionWidget, 5, 0, 1, 2)
 
@@ -413,7 +418,6 @@ class Ui_mainWindow(object):
         self.statusBar.setObjectName(u"statusBar")
         self.statusBar.setSizeGripEnabled(False)
         mainWindow.setStatusBar(self.statusBar)
-        QWidget.setTabOrder(self.convertButton, self.clearButton)
         QWidget.setTabOrder(self.clearButton, self.directoryButton)
         QWidget.setTabOrder(self.directoryButton, self.fileButton)
         QWidget.setTabOrder(self.fileButton, self.deviceBox)
@@ -434,7 +438,8 @@ class Ui_mainWindow(object):
         QWidget.setTabOrder(self.spreadShiftBox, self.deleteBox)
         QWidget.setTabOrder(self.deleteBox, self.disableProcessingBox)
         QWidget.setTabOrder(self.disableProcessingBox, self.chunkSizeBox)
-        QWidget.setTabOrder(self.chunkSizeBox, self.noRotateBox)
+        QWidget.setTabOrder(self.chunkSizeBox, self.ncxProcessingBox)
+        QWidget.setTabOrder(self.ncxProcessingBox, self.noRotateBox)
         QWidget.setTabOrder(self.noRotateBox, self.interPanelCropBox)
         QWidget.setTabOrder(self.interPanelCropBox, self.reduceRainbowBox)
         QWidget.setTabOrder(self.reduceRainbowBox, self.heightBox)
@@ -444,6 +449,9 @@ class Ui_mainWindow(object):
         QWidget.setTabOrder(self.wikiButton, self.jobList)
         QWidget.setTabOrder(self.jobList, self.gammaSlider)
         QWidget.setTabOrder(self.gammaSlider, self.widthBox)
+        QWidget.setTabOrder(self.widthBox, self.preserveMarginBox)
+        QWidget.setTabOrder(self.preserveMarginBox, self.chunkSizeCheckBox)
+        QWidget.setTabOrder(self.chunkSizeCheckBox, self.convertButton)
 
         self.retranslateUi(mainWindow)
 
@@ -575,6 +583,10 @@ class Ui_mainWindow(object):
         self.chunkSizeCheckBox.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p><span style=\" font-weight:700; text-decoration: underline;\">Unchecked<br/></span>Maximal output file size is 100 MB for Webtoon, 400 MB for others before split occurs.</p><p><span style=\" font-weight:700; text-decoration: underline;\">Checked</span><br/>Output file size specified in &quot;Chunk size MB&quot; before split occurs.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.chunkSizeCheckBox.setText(QCoreApplication.translate("mainWindow", u"Chunk size", None))
+#if QT_CONFIG(tooltip)
+        self.ncxProcessingBox.setToolTip(QCoreApplication.translate("mainWindow", u"Process NCX files to reorder images based on playOrder", None))
+#endif // QT_CONFIG(tooltip)
+        self.ncxProcessingBox.setText(QCoreApplication.translate("mainWindow", u"NCX Process", None))
         self.gammaLabel.setText(QCoreApplication.translate("mainWindow", u"Gamma: Auto", None))
 #if QT_CONFIG(tooltip)
         self.chunkSizeWidget.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p>Warning: chunk size greater than default may cause<br/>performance/battery issues, especially on older devices.</p></body></html>", None))

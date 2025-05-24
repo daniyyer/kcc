@@ -282,6 +282,8 @@ class WorkerThread(QThread):
             options.author = str(GUI.authorEdit.text())
         if GUI.chunkSizeCheckBox.isChecked():
             options.targetsize = int(GUI.chunkSizeBox.value())
+        if GUI.ncxProcessingBox.isChecked():
+            options.ncxprocessing = True
 
         for i in range(GUI.jobList.count()):
             # Make sure that we don't consider any system message as job to do
@@ -826,7 +828,8 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
                                            'maximizeStrips': GUI.maximizeStrips.checkState().value,
                                            'gammaSlider': float(self.gammaValue) * 100,
                                            'chunkSizeCheckBox': GUI.chunkSizeCheckBox.checkState().value,
-                                           'chunkSizeBox': GUI.chunkSizeBox.value()})
+                                           'chunkSizeBox': GUI.chunkSizeBox.value(),
+                                           'ncxProcessingBox': GUI.ncxProcessingBox.checkState().value})
         self.settings.sync()
         self.tray.hide()
 
