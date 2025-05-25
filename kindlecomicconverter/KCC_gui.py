@@ -45,6 +45,7 @@ from . import metadata
 from . import kindle
 from . import KCC_ui
 from . import KCC_ui_editor
+from kcc import modify_path
 
 
 class QApplicationMessaging(QApplication):
@@ -284,6 +285,8 @@ class WorkerThread(QThread):
             options.targetsize = int(GUI.chunkSizeBox.value())
         if GUI.ncxProcessingBox.isChecked():
             options.ncxprocessing = True
+        if GUI.kindlePreviewerPathEdit.text():
+            options.kindlePreviewerPath=str(GUI.kindlePreviewerPathEdit.text())
 
         for i in range(GUI.jobList.count()):
             # Make sure that we don't consider any system message as job to do
@@ -462,6 +465,66 @@ class SystemTrayIcon(QSystemTrayIcon):
 
 
 class KCCGUI(KCC_ui.Ui_mainWindow):
+    def selectKindlePreviewerPath(self):
+        """选择 Kindle Previewer 3 安装路径"""
+        path = QFileDialog.getExistingDirectory(
+            MW,
+            'Select Kindle Previewer 3 Installation Directory',
+            self.lastCustomPath
+        )
+        if path:
+            GUI.kindlePreviewerPathEdit.setText(path)
+            print(os.environ['PATH'])
+            if self.lastCustomPath:
+                current_paths = os.environ['PATH'].split(os.pathsep)
+                print(f"当前 PATH: {os.environ['PATH']}")
+                print(f"要删除的路径: {os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin')}")
+                current_paths = os.environ['PATH'].split(os.pathsep)
+                print(f"PATH 分割后的所有路径:")
+                for i, t_path in enumerate(current_paths):
+                    marker = " <-- 要删除" if t_path == os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin') else ""
+                    print(f"  {i}: {t_path}{marker}")
+                os.environ['PATH'] = os.pathsep.join([p for p in current_paths if p != os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin')])
+            print(f"删除后 PATH: {os.environ['PATH']}")
+            self.settings.setValue('options', {'kindlePreviewerPath': path})
+
+            modify_path()
+            self.detectKindleGen()
+            if not self.kindleGen:
+                self.display_kindlegen_missing()
+            else:
+                self.remove_kindlegen_missing_message()
+            self.lastCustomPath = path
+
+        #     # 验证路径是否包含 kindlegen 或相关工具
+        #     if self.validateKindlePreviewerPath(path):
+        #         GUI.kindlePreviewerPathEdit.setText(path)
+        #         self.kindlePreviewerPath = path
+        #     else:
+        #         self.showDialog("Invalid Kindle Previewer 3 path selected.", 'error')
+
+
+    def validateKindlePreviewerPath(self, path):
+        """验证选择的路径是否为有效的 Kindle Previewer 3 安装目录"""
+        # 检查关键文件是否存在
+        kindlegen_path = os.path.join(path, 'lib', 'fc', 'bin', 'kindlegen.exe')
+        return os.path.exists(kindlegen_path)
+
+    def remove_kindlegen_missing_message(self):
+        """当 kindleGen 为真时，删除相关的错误提示"""
+        if self.kindleGen:
+            message_content = '<a href="https://github.com/ciromattia/kcc#kindlegen"><b>Install KindleGen (link)</b></a> to enable MOBI conversion for Kindles!'
+
+            # 遍历消息列表，找到并删除匹配的消息
+            for i in range(GUI.jobList.count() - 1, -1, -1):  # 倒序遍历避免索引问题
+                item = GUI.jobList.item(i)
+                if item:
+                    widget = GUI.jobList.itemWidget(item)
+                    if widget and hasattr(widget, 'text'):
+                        if widget.text() == message_content:
+                            GUI.jobList.takeItem(i)
+                            break
+
     def selectDir(self):
         if self.needClean:
             self.needClean = False
@@ -784,11 +847,21 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
             self.worker.start()
 
     def display_kindlegen_missing(self):
-        self.addMessage(
-            '<a href="https://github.com/ciromattia/kcc#kindlegen"><b>Install KindleGen (link)</b></a> to enable MOBI conversion for Kindles!',
-            'error'
-        )
+        message_content='<a href="https://github.com/ciromattia/kcc#kindlegen"><b>Install KindleGen (link)</b></a> to enable MOBI conversion for Kindles!'
+        if not self.is_message_already_shown(message_content):
+            self.addMessage(message_content, 'error')
 
+    def is_message_already_shown(self, message_content):
+        """检查当前消息列表中是否已有相同内容（纯文本比较）"""
+        stripped_content = self.stripTags(message_content)
+        for i in range(GUI.jobList.count()):
+            item = GUI.jobList.item(i)
+            if item:
+                widget = GUI.jobList.itemWidget(item)
+                if widget and hasattr(widget, 'text'):
+                    if self.stripTags(widget.text()) == stripped_content:
+                        return True
+        return False
     def saveSettings(self, event):
         if self.conversionAlive:
             GUI.convertButton.setEnabled(False)
@@ -800,6 +873,7 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
             event.ignore()
         self.settings.setValue('settingsVersion', __version__)
         self.settings.setValue('lastPath', self.lastPath)
+        self.settings.setValue('lastCustomPath',self.lastCustomPath)
         self.settings.setValue('lastDevice', GUI.deviceBox.currentIndex())
         self.settings.setValue('currentFormat', GUI.formatBox.currentIndex())
         self.settings.setValue('startNumber', self.startNumber + 1)
@@ -829,7 +903,8 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
                                            'gammaSlider': float(self.gammaValue) * 100,
                                            'chunkSizeCheckBox': GUI.chunkSizeCheckBox.checkState().value,
                                            'chunkSizeBox': GUI.chunkSizeBox.value(),
-                                           'ncxProcessingBox': GUI.ncxProcessingBox.checkState().value})
+                                           'ncxProcessingBox': GUI.ncxProcessingBox.checkState().value,
+                                           'kindlePreviewerPath': GUI.kindlePreviewerPathEdit.text()})
         self.settings.sync()
         self.tray.hide()
 
@@ -923,6 +998,7 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         self.currentMode = 1
         self.targetDirectory = ''
         self.sentry = Client(release=__version__)
+        self.lastCustomPath = self.options["kindlePreviewerPath"]
         if sys.platform.startswith('win'):
             # noinspection PyUnresolvedReferences
             from psutil import BELOW_NORMAL_PRIORITY_CLASS
@@ -1100,6 +1176,8 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         if not any([self.tar, self.sevenzip]):
             self.addMessage('<a href="https://github.com/ciromattia/kcc#7-zip">Install 7z (link)</a>'
                             ' to enable CBZ/CBR/ZIP/etc processing.', 'warning')
+
+
         self.detectKindleGen(True)
 
         APP.messageFromOtherInstance.connect(self.handleMessage)
@@ -1118,6 +1196,7 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         GUI.chunkSizeCheckBox.stateChanged.connect(self.togglechunkSizeCheckBox)
         GUI.deviceBox.activated.connect(self.changeDevice)
         GUI.formatBox.activated.connect(self.changeFormat)
+        GUI.kindlePreviewerBrowseButton.clicked.connect(self.selectKindlePreviewerPath)
         MW.progressBarTick.connect(self.updateProgressbar)
         MW.modeConvert.connect(self.modeConvert)
         MW.addMessage.connect(self.addMessage)
@@ -1171,6 +1250,10 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
                     GUI.preserveMarginBox.setValue(self.options.get('preserveMarginBox', 0))
             elif str(option) == "chunkSizeBox":
                 GUI.chunkSizeBox.setValue(int(self.options[option]))
+            elif str(option) == "kindlePreviewerPath":
+                self.kindlePreviewerPath = self.options[option]
+                if self.kindlePreviewerPath:
+                    GUI.kindlePreviewerPathEdit.setText(self.kindlePreviewerPath)
             else:
                 try:
                     if getattr(GUI, option).isEnabled():
