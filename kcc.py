@@ -32,7 +32,7 @@ def modify_path():
     # 首先尝试从设置中获取用户自定义路径
     from PySide6.QtCore import QSettings
     settings = QSettings('ciromattia', 'kcc')
-    custom_path = settings.value('options')['kindlePreviewerPath']
+    custom_path = getattr(settings.value('options'), 'kindlePreviewerPath', "")
 
     if platform.system() == 'Darwin':
         mac_paths = [

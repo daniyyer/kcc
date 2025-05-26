@@ -998,7 +998,7 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         self.currentMode = 1
         self.targetDirectory = ''
         self.sentry = Client(release=__version__)
-        self.lastCustomPath = self.options["kindlePreviewerPath"]
+        self.lastCustomPath = getattr(self.options, 'kindlePreviewerPath', "")
         if sys.platform.startswith('win'):
             # noinspection PyUnresolvedReferences
             from psutil import BELOW_NORMAL_PRIORITY_CLASS
@@ -1197,6 +1197,8 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         GUI.deviceBox.activated.connect(self.changeDevice)
         GUI.formatBox.activated.connect(self.changeFormat)
         GUI.kindlePreviewerBrowseButton.clicked.connect(self.selectKindlePreviewerPath)
+        # if not sys.platform.startswith('win'):
+            # GUI.setKp3Path.setVisible(False)
         MW.progressBarTick.connect(self.updateProgressbar)
         MW.modeConvert.connect(self.modeConvert)
         MW.addMessage.connect(self.addMessage)

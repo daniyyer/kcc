@@ -303,24 +303,6 @@ class Ui_mainWindow(object):
 
         self.gridLayout_2.addWidget(self.rotateBox, 1, 1, 1, 1)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.kindlePreviewerBrowseButton = QPushButton(self.optionWidget)
-        self.kindlePreviewerBrowseButton.setObjectName(u"kindlePreviewerBrowseButton")
-
-        self.horizontalLayout_3.addWidget(self.kindlePreviewerBrowseButton)
-
-        self.kindlePreviewerPathEdit = QLineEdit(self.optionWidget)
-        self.kindlePreviewerPathEdit.setObjectName(u"kindlePreviewerPathEdit")
-        self.kindlePreviewerPathEdit.setEnabled(False)
-        self.kindlePreviewerPathEdit.setReadOnly(False)
-        self.kindlePreviewerPathEdit.setCursorMoveStyle(Qt.CursorMoveStyle.VisualMoveStyle)
-
-        self.horizontalLayout_3.addWidget(self.kindlePreviewerPathEdit)
-
-
-        self.gridLayout_2.addLayout(self.horizontalLayout_3, 0, 1, 1, 2)
-
         self.chunkSizeCheckBox = QCheckBox(self.optionWidget)
         self.chunkSizeCheckBox.setObjectName(u"chunkSizeCheckBox")
 
@@ -368,6 +350,26 @@ class Ui_mainWindow(object):
         self.mozJpegBox.setTristate(True)
 
         self.gridLayout_2.addWidget(self.mozJpegBox, 4, 0, 1, 1)
+
+        self.widget = QWidget(self.optionWidget)
+        self.widget.setObjectName(u"widget")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.kindlePreviewerBrowseButton = QPushButton(self.widget)
+        self.kindlePreviewerBrowseButton.setObjectName(u"kindlePreviewerBrowseButton")
+
+        self.horizontalLayout_3.addWidget(self.kindlePreviewerBrowseButton)
+
+        self.kindlePreviewerPathEdit = QLineEdit(self.widget)
+        self.kindlePreviewerPathEdit.setObjectName(u"kindlePreviewerPathEdit")
+        self.kindlePreviewerPathEdit.setEnabled(False)
+        self.kindlePreviewerPathEdit.setReadOnly(False)
+        self.kindlePreviewerPathEdit.setCursorMoveStyle(Qt.CursorMoveStyle.VisualMoveStyle)
+
+        self.horizontalLayout_3.addWidget(self.kindlePreviewerPathEdit)
+
+
+        self.gridLayout_2.addWidget(self.widget, 0, 1, 1, 2)
 
 
         self.gridLayout.addWidget(self.optionWidget, 5, 0, 1, 2)
@@ -569,8 +571,6 @@ class Ui_mainWindow(object):
         self.rotateBox.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline;\">Unchecked - Split<br/></span>Double page spreads will be cut into two separate pages.</p><p><span style=\" font-weight:600; text-decoration: underline;\">Indeterminate - Rotate and split<br/></span>Double page spreads will be displayed twice. First rotated and then split. </p><p><span style=\" font-weight:600; text-decoration: underline;\">Checked - Rotate<br/></span>Double page spreads will be rotated.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.rotateBox.setText(QCoreApplication.translate("mainWindow", u"Spread splitter", None))
-        self.kindlePreviewerBrowseButton.setText(QCoreApplication.translate("mainWindow", u"Browse...", None))
-        self.kindlePreviewerPathEdit.setPlaceholderText(QCoreApplication.translate("mainWindow", u"kindle Previewer 3 Path", None))
 #if QT_CONFIG(tooltip)
         self.chunkSizeCheckBox.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p><span style=\" font-weight:700; text-decoration: underline;\">Unchecked<br/></span>Maximal output file size is 100 MB for Webtoon, 400 MB for others before split occurs.</p><p><span style=\" font-weight:700; text-decoration: underline;\">Checked</span><br/>Output file size specified in &quot;Chunk size MB&quot; before split occurs.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
@@ -607,6 +607,8 @@ class Ui_mainWindow(object):
         self.mozJpegBox.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p><span style=\" font-weight:600; text-decoration: underline;\">Unchecked - JPEG<br/></span>Use JPEG files</p><p><span style=\" font-weight:600; text-decoration: underline;\">Indeterminate - force PNG<br/></span>Create PNG files instead JPEG</p><p><span style=\" font-weight:600; text-decoration: underline;\">Checked - mozJpeg<br/></span>10-20% smaller JPEG file, with the same image quality, but processing time multiplied by 2</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.mozJpegBox.setText(QCoreApplication.translate("mainWindow", u"JPEG/PNG/mozJpeg", None))
+        self.kindlePreviewerBrowseButton.setText(QCoreApplication.translate("mainWindow", u"Browse...", None))
+        self.kindlePreviewerPathEdit.setPlaceholderText(QCoreApplication.translate("mainWindow", u"kindle Previewer 3 Path", None))
         self.gammaLabel.setText(QCoreApplication.translate("mainWindow", u"Gamma: Auto", None))
 #if QT_CONFIG(tooltip)
         self.chunkSizeWidget.setToolTip(QCoreApplication.translate("mainWindow", u"<html><head/><body><p>Warning: chunk size greater than default may cause<br/>performance/battery issues, especially on older devices.</p></body></html>", None))

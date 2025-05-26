@@ -554,33 +554,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QPushButton" name="kindlePreviewerBrowseButton">
-           <property name="text">
-            <string>Browse...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="kindlePreviewerPathEdit">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="readOnly">
-            <bool>false</bool>
-           </property>
-           <property name="placeholderText">
-            <string>kindle Previewer 3 Path</string>
-           </property>
-           <property name="cursorMoveStyle">
-            <enum>Qt::CursorMoveStyle::VisualMoveStyle</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="7" column="1">
         <widget class="QCheckBox" name="chunkSizeCheckBox">
          <property name="toolTip">
@@ -678,6 +651,35 @@
          <property name="tristate">
           <bool>true</bool>
          </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QWidget" name="" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="kindlePreviewerBrowseButton">
+            <property name="text">
+             <string>Browse...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="kindlePreviewerPathEdit">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>kindle Previewer 3 Path</string>
+            </property>
+            <property name="cursorMoveStyle">
+             <enum>Qt::CursorMoveStyle::VisualMoveStyle</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
