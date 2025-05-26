@@ -32,7 +32,7 @@ def modify_path():
     # 首先尝试从设置中获取用户自定义路径
     from PySide6.QtCore import QSettings
     settings = QSettings('ciromattia', 'kcc')
-    custom_path = getattr(settings.value('options'), 'kindlePreviewerPath', "")
+    custom_path = settings.value('options').get('kindlePreviewerPath', '')
 
     if platform.system() == 'Darwin':
         mac_paths = [
@@ -78,11 +78,12 @@ def modify_path():
             'E:\\Apps\\Kindle Previewer 3\\lib\\fc\\bin',
             'C:\\Program Files\\7-Zip',
             'D:\\Program Files\\7-Zip',
-            'E:\\Program Files\\7-Zip'
+            'E:\\Program Files\\7-Zip',
+            # 'D:\\Program Files (x86)\\Kindle Previewer 3',
         ]
         # 如果用户设置了自定义路径，添加到环境变量中
         if custom_path and os.path.exists(custom_path):
-            win_paths.append(os.path.join(custom_path, 'lib', 'fc', 'bin'))
+            win_paths.append(custom_path)
 
         # 获取当前 PATH 中的路径
         current_paths = set(os.environ.get('PATH', '').split(os.pathsep))
@@ -91,14 +92,15 @@ def modify_path():
         existing_paths = [t_path for t_path in win_paths
                           if os.path.exists(t_path) and t_path not in current_paths]
 
-        for i, t_path in enumerate(existing_paths):
-            print(f"  {i}: {t_path}")
+
 
         if getattr(sys, 'frozen', False):
-            os.environ['PATH'] += os.pathsep + os.pathsep.join(existing_paths)
+            if len(existing_paths):
+                os.environ['PATH'] += os.pathsep + os.pathsep.join(existing_paths)
             os.chdir(os.path.dirname(os.path.abspath(sys.executable)))
         else:
-            os.environ['PATH'] += os.pathsep + os.pathsep.join(existing_paths)
+            if len(existing_paths):
+                os.environ['PATH'] += os.pathsep + os.pathsep.join(existing_paths)
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 

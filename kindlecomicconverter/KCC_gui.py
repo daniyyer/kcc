@@ -474,18 +474,9 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         )
         if path:
             GUI.kindlePreviewerPathEdit.setText(path)
-            print(os.environ['PATH'])
             if self.lastCustomPath:
                 current_paths = os.environ['PATH'].split(os.pathsep)
-                print(f"当前 PATH: {os.environ['PATH']}")
-                print(f"要删除的路径: {os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin')}")
-                current_paths = os.environ['PATH'].split(os.pathsep)
-                print(f"PATH 分割后的所有路径:")
-                for i, t_path in enumerate(current_paths):
-                    marker = " <-- 要删除" if t_path == os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin') else ""
-                    print(f"  {i}: {t_path}{marker}")
-                os.environ['PATH'] = os.pathsep.join([p for p in current_paths if p != os.path.join(self.lastCustomPath, 'lib', 'fc', 'bin')])
-            print(f"删除后 PATH: {os.environ['PATH']}")
+                os.environ['PATH'] = os.pathsep.join([p for p in current_paths if p != self.lastCustomPath])
             self.settings.setValue('options', {'kindlePreviewerPath': path})
 
             modify_path()
@@ -998,7 +989,7 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         self.currentMode = 1
         self.targetDirectory = ''
         self.sentry = Client(release=__version__)
-        self.lastCustomPath = getattr(self.options, 'kindlePreviewerPath', "")
+        self.lastCustomPath = self.options.get('kindlePreviewerPath', "")
         if sys.platform.startswith('win'):
             # noinspection PyUnresolvedReferences
             from psutil import BELOW_NORMAL_PRIORITY_CLASS
