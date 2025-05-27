@@ -654,7 +654,7 @@
         </widget>
        </item>
        <item row="0" column="1" colspan="2">
-        <widget class="QWidget" name="" native="true">
+        <widget class="QWidget" name="setKp3Path" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QPushButton" name="kindlePreviewerBrowseButton">

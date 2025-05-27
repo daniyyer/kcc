@@ -1188,8 +1188,8 @@ class KCCGUI(KCC_ui.Ui_mainWindow):
         GUI.deviceBox.activated.connect(self.changeDevice)
         GUI.formatBox.activated.connect(self.changeFormat)
         GUI.kindlePreviewerBrowseButton.clicked.connect(self.selectKindlePreviewerPath)
-        # if not sys.platform.startswith('win'):
-            # GUI.setKp3Path.setVisible(False)
+        if not sys.platform.startswith('win'):
+            GUI.setKp3Path.setVisible(False)
         MW.progressBarTick.connect(self.updateProgressbar)
         MW.modeConvert.connect(self.modeConvert)
         MW.addMessage.connect(self.addMessage)

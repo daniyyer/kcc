@@ -351,16 +351,16 @@ class Ui_mainWindow(object):
 
         self.gridLayout_2.addWidget(self.mozJpegBox, 4, 0, 1, 1)
 
-        self.widget = QWidget(self.optionWidget)
-        self.widget.setObjectName(u"widget")
-        self.horizontalLayout_3 = QHBoxLayout(self.widget)
+        self.setKp3Path = QWidget(self.optionWidget)
+        self.setKp3Path.setObjectName(u"setKp3Path")
+        self.horizontalLayout_3 = QHBoxLayout(self.setKp3Path)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.kindlePreviewerBrowseButton = QPushButton(self.widget)
+        self.kindlePreviewerBrowseButton = QPushButton(self.setKp3Path)
         self.kindlePreviewerBrowseButton.setObjectName(u"kindlePreviewerBrowseButton")
 
         self.horizontalLayout_3.addWidget(self.kindlePreviewerBrowseButton)
 
-        self.kindlePreviewerPathEdit = QLineEdit(self.widget)
+        self.kindlePreviewerPathEdit = QLineEdit(self.setKp3Path)
         self.kindlePreviewerPathEdit.setObjectName(u"kindlePreviewerPathEdit")
         self.kindlePreviewerPathEdit.setEnabled(False)
         self.kindlePreviewerPathEdit.setReadOnly(False)
@@ -369,7 +369,7 @@ class Ui_mainWindow(object):
         self.horizontalLayout_3.addWidget(self.kindlePreviewerPathEdit)
 
 
-        self.gridLayout_2.addWidget(self.widget, 0, 1, 1, 2)
+        self.gridLayout_2.addWidget(self.setKp3Path, 0, 1, 1, 2)
 
 
         self.gridLayout.addWidget(self.optionWidget, 5, 0, 1, 2)
