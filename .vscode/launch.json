@@ -1,0 +1,65 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "KCC: Launch GUI",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/kcc.py",
+            "osx": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "linux": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "windows": {
+                "python": "${workspaceFolder}/venv/Scripts/python.exe"
+            },
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "KCC: CLI c2e (Comic 2 Epub)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/kcc-c2e.py",
+            "osx": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "linux": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "windows": {
+                "python": "${workspaceFolder}/venv/Scripts/python.exe"
+            },
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-h"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "KCC: CLI c2p (Comic 2 Panel)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/kcc-c2p.py",
+            "osx": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "linux": {
+                "python": "${workspaceFolder}/venv/bin/python"
+            },
+            "windows": {
+                "python": "${workspaceFolder}/venv/Scripts/python.exe"
+            },
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-h"
+            ],
+            "justMyCode": true
+        }
+    ]
+}
